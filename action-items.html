@@ -82,7 +82,121 @@
     .action-meta { font-size:12px; color:var(--on-surface-variant); }
     .action-end { display:flex; flex-direction:column; align-items:flex-end; gap:8px; flex-shrink:0; }
     .action-time { font-size:11px; color:var(--on-surface-variant); }
-</style>
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+      width: 420px;
+      max-width: 92vw;
+      overflow: hidden;
+      transform: scale(0.92) translateY(16px);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+    .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+
+    .modal-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-header h3 { font-size: 15px; font-weight: 500; margin: 0; }
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; background: rgba(255,255,255,0.15);
+      border: none; color: #fff; font-family: 'Material Symbols Outlined'; font-size: 18px;
+      line-height: 1; transition: background 0.15s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.3); }
+
+    .modal-body { padding: 24px; }
+
+    /* Statement info rows */
+    .modal-info-row {
+      display: flex; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid var(--outline-variant);
+      font-size: 14px;
+    }
+    .modal-info-row:last-of-type { border-bottom: none; }
+    .modal-info-label { color: var(--on-surface-variant); }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--outline-variant);
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+
+    /* ── PHOTO WITH OK FINE BUBBLE ── */
+    @keyframes bubblePop {
+      0%   { transform: scale(0.4) translateY(8px); opacity: 0; }
+      30%  { transform: scale(1.1) translateY(-4px); opacity: 1; }
+      55%  { transform: scale(0.97) translateY(0); opacity: 1; }
+      80%  { transform: scale(1.0); opacity: 1; }
+      100% { transform: scale(0.85) translateY(-4px); opacity: 0; }
+    }
+    .photo-wrap {
+      position: relative;
+      width: 120px; height: 120px;
+      margin: 0 auto 20px;
+    }
+    .photo-wrap img {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary-container);
+      display: block;
+    }
+    .ok-bubble {
+      position: absolute;
+      top: -44px; left: 50%;
+      transform: translateX(-50%);
+      background: #1A1B1F;
+      color: #fff;
+      font-size: 13px; font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 18px;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      animation: bubblePop 1.4s cubic-bezier(0.34,1.56,0.64,1) 0.3s forwards;
+      opacity: 0;
+    }
+    .ok-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -7px; left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 8px solid #1A1B1F;
+    }
+    .modal-name {
+      text-align: center;
+      font-size: 15px; font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 4px;
+    }
+    .modal-role {
+      text-align: center;
+      font-size: 12px; color: var(--on-surface-variant);
+      margin-bottom: 20px;
+    }
+
+  </style>
 </head>
 <body>
   <div class="app-bar">
@@ -174,7 +288,7 @@
           <div class="action-title">Annual statement ready — Williams, Sarah</div>
           <div class="action-meta">LS22887123 · Year 4 statement available for download</div>
         </div>
-        <div class="action-end"><div class="action-time">2d ago</div><span class="badge primary">New</span><button class="btn-outlined" style="padding:5px 14px;font-size:12px;">View</button></div>
+        <div class="action-end"><div class="action-time">2d ago</div><span class="badge primary">New</span><button class="btn-outlined" style="padding:5px 14px;font-size:12px;" onclick="openModal()">View</button></div>
       </div>
     </main>
   </div>
@@ -182,5 +296,54 @@
     <span class="material-symbols-outlined" style="font-size:16px;color:var(--primary)">construction</span>
     <span><strong>Prototype</strong> — Master Settlor Portal · ILIA Design Kit v1.0 · NIW / Simplicity Group</span>
   </div>
+
+<!-- ANNUAL STATEMENT MODAL -->
+<div class="modal-overlay" id="statementModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Annual Statement — Williams, Sarah</h3>
+      <button class="modal-close" onclick="closeModal()">close</button>
+    </div>
+    <div class="modal-body">
+      <div class="photo-wrap">
+        <div class="ok-bubble" id="okBubble">OK, Fine. 🙄</div>
+        <img src="https://i.pravatar.cc/120?img=47" alt="Sarah Williams" />
+      </div>
+      <div class="modal-name">Sarah Williams</div>
+      <div class="modal-role">Settlor · Policy LS22887123 · Year 4</div>
+      <div class="modal-info-row"><span class="modal-info-label">Statement Period</span><strong>Jan 1 – Dec 31, 2025</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">Policy Number</span><strong>LS22887123</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">Carrier</span><strong>North American</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">Face Value</span><strong>$1,100,000</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">Annual Premium Paid</span><strong>$43,550</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">Policy Status</span><strong style="color:var(--success)">In Force</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">Statement Available</span><strong>PDF · 2.4 MB</strong></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outlined" onclick="closeModal()">Close</button>
+      <button class="btn-primary"><span class="material-symbols-outlined" style="font-size:16px">download</span>Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal() {
+  const overlay = document.getElementById('statementModal');
+  overlay.classList.add('open');
+  // Reset bubble animation
+  const bubble = document.getElementById('okBubble');
+  bubble.style.animation = 'none';
+  bubble.offsetHeight; // reflow
+  bubble.style.animation = 'bubblePop 1.4s cubic-bezier(0.34,1.56,0.64,1) 0.3s forwards';
+}
+function closeModal() {
+  document.getElementById('statementModal').classList.remove('open');
+}
+// Close on overlay click
+document.getElementById('statementModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+
 </body>
 </html>
