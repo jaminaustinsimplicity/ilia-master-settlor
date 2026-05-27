@@ -21,6 +21,8 @@
     }
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Roboto',system-ui,sans-serif;background:var(--surface-container-low);color:var(--on-surface);display:flex;flex-direction:column;min-height:100vh;}
+
+    /* ── App Bar ── */
     .app-bar{background:var(--primary);color:#fff;display:flex;align-items:center;gap:16px;padding:0 24px;height:64px;flex-shrink:0;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
     .app-bar-logo{font-size:20px;font-weight:700;letter-spacing:0.5px;}
     .app-bar-divider{width:1px;height:24px;background:rgba(255,255,255,0.3);}
@@ -31,7 +33,11 @@
     .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--warning);border:2px solid var(--primary);}
     .avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;}
     .material-symbols-outlined{font-family:'Material Symbols Outlined';line-height:1;}
+
+    /* ── Outer layout ── */
     .layout{display:flex;flex:1;overflow:hidden;}
+
+    /* ── Nav Rail (MS Portal outer nav) ── */
     .nav-rail{width:88px;background:var(--surface-container);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;border-right:1px solid var(--outline-variant);flex-shrink:0;position:sticky;top:64px;height:calc(100vh - 64px);}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px;border-radius:16px;cursor:pointer;width:76px;transition:background 0.15s;text-decoration:none;position:relative;}
     .nav-item:hover{background:var(--surface-container-high);}
@@ -42,38 +48,107 @@
     .nav-item.active .nav-label{color:var(--primary);font-weight:500;}
     .nav-spacer{flex:1;}
     .nav-badge{position:absolute;top:6px;right:8px;background:var(--warning);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--surface-container);line-height:1;}
-    .content{flex:1;padding:28px 32px;overflow-y:auto;}
-    .page-header{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;}
-    .page-title{font-size:24px;font-weight:500;}
-    .page-sub{font-size:14px;color:var(--on-surface-variant);margin-top:4px;}
-    .card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:16px;overflow:hidden;margin-bottom:16px;}
-    .card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid var(--outline-variant);}
-    .card-title{font-size:15px;font-weight:500;}
+
+    /* ── Inner client portal wrapper ── */
+    .portal-outer{flex:1;overflow-y:auto;display:flex;}
+
+    /* ── Client Portal Left Sidebar ── */
+    .client-sidebar{width:232px;flex-shrink:0;background:#fff;border-right:1px solid var(--outline-variant);display:flex;flex-direction:column;position:sticky;top:0;height:calc(100vh - 64px);overflow-y:auto;}
+    .client-sidebar-logo{padding:20px 20px 8px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--outline-variant);}
+    .ilia-wordmark{display:flex;align-items:center;gap:8px;}
+    .ilia-wordmark-text{font-size:13px;color:var(--on-surface-variant);line-height:1.35;}
+    .ilia-wordmark-text strong{display:block;font-size:11px;color:var(--on-surface-variant);font-weight:400;}
+    .sidebar-dots{display:flex;gap:5px;margin:6px 20px 14px;}
+    .dot{width:9px;height:9px;border-radius:50%;}
+    .sponsored{padding:0 20px 14px;font-size:10px;color:var(--on-surface-variant);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--outline-variant);}
+    .client-nav-section{padding:10px 0;}
+    .client-nav-item{display:flex;align-items:center;gap:12px;padding:11px 20px;font-size:14px;color:var(--on-surface);cursor:pointer;text-decoration:none;transition:background 0.15s;position:relative;}
+    .client-nav-item:hover{background:var(--surface-container-low);}
+    .client-nav-item.active{background:var(--primary-container);color:var(--primary);font-weight:500;border-left:3px solid var(--primary);}
+    .client-nav-item .material-symbols-outlined{font-size:20px;color:var(--on-surface-variant);}
+    .client-nav-item.active .material-symbols-outlined{color:var(--primary);}
+    .client-nav-chevron{margin-left:auto;font-size:16px !important;}
+
+    /* ── Client Portal Main Content ── */
+    .client-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+
+    /* ── Hero banner ── */
+    .hero{background:linear-gradient(135deg,#1a52d4 0%,#2A62E4 40%,#3b7ff5 70%,#5b9af8 100%);color:#fff;padding:32px 36px;position:relative;overflow:hidden;min-height:148px;display:flex;flex-direction:column;justify-content:center;}
+    .hero::before{content:'';position:absolute;right:-40px;top:-60px;width:420px;height:260px;background:rgba(255,255,255,0.07);border-radius:50%;pointer-events:none;}
+    .hero::after{content:'';position:absolute;right:60px;bottom:-80px;width:300px;height:300px;background:rgba(255,255,255,0.05);border-radius:50%;pointer-events:none;}
+    .hero-accent{width:36px;height:3px;border-radius:2px;background:linear-gradient(90deg,#18A862,#E6A82E,#BA1A1A);margin-bottom:12px;}
+    .hero-title{font-size:26px;font-weight:700;margin-bottom:10px;position:relative;}
+    .hero-body{font-size:14px;line-height:1.65;opacity:0.92;max-width:680px;position:relative;}
+    .hero-ms-badge{position:absolute;top:20px;right:28px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:500;display:flex;align-items:center;gap:6px;}
+
+    /* ── Policy selector zone ── */
+    .selector-zone{padding:22px 36px 0;background:var(--surface);}
+    .selector-label{font-size:13px;font-weight:500;color:var(--on-surface-variant);margin-bottom:8px;}
+    .selector-row{display:flex;align-items:center;gap:12px;}
+    .policy-select-wrap{position:relative;min-width:320px;}
+    .policy-select{width:100%;padding:12px 40px 12px 14px;border:1.5px solid var(--outline);border-radius:8px;font-size:14px;font-family:'Roboto',sans-serif;color:var(--on-surface);background:#fff;appearance:none;cursor:pointer;outline:none;transition:border-color 0.15s;}
+    .policy-select:focus{border-color:var(--primary);}
+    .select-chevron{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--on-surface-variant);pointer-events:none;}
+    .policy-year-note{font-size:13px;color:var(--on-surface-variant);padding:8px 0 0;font-style:italic;}
+    .policy-year-note strong{color:var(--primary);font-style:normal;}
+
+    /* ── Stat cards ── */
+    .stat-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:0;background:var(--surface);border-top:1px solid var(--outline-variant);border-bottom:1px solid var(--outline-variant);}
+    .stat-card{padding:18px 20px;border-right:1px solid var(--outline-variant);display:flex;flex-direction:column;gap:6px;}
+    .stat-card:last-child{border-right:none;}
+    .stat-card.payment{background:linear-gradient(135deg,#18A862,#0e7a47);color:#fff;}
+    .stat-label{font-size:11px;font-weight:500;color:var(--on-surface-variant);text-transform:uppercase;letter-spacing:0.4px;}
+    .stat-card.payment .stat-label{color:rgba(255,255,255,0.8);}
+    .stat-value{font-size:22px;font-weight:700;}
+    .stat-card.payment .stat-value{color:#fff;font-size:28px;}
+    .stat-due{font-size:11px;color:rgba(255,255,255,0.85);margin-top:2px;}
+    .stat-na{font-size:14px;font-weight:500;color:var(--on-surface-variant);}
+    .btn-view-payments{margin-top:8px;padding:7px 16px;background:rgba(255,255,255,0.22);border:1px solid rgba(255,255,255,0.5);border-radius:20px;font-size:12px;font-weight:500;color:#fff;cursor:pointer;font-family:'Roboto',sans-serif;transition:background 0.15s;display:inline-block;text-align:center;}
+    .btn-view-payments:hover{background:rgba(255,255,255,0.35);}
+
+    /* ── Inner content area (tabs + detail) ── */
+    .inner-content{flex:1;padding:24px 36px;background:var(--surface-container-low);}
+
+    /* ── Tab bar ── */
+    .tab-bar{display:flex;border-bottom:2px solid var(--outline-variant);margin-bottom:24px;gap:0;}
+    .tab{padding:12px 20px;font-size:14px;font-weight:500;color:var(--on-surface-variant);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color 0.15s,border-color 0.15s;white-space:nowrap;}
+    .tab.active{color:var(--primary);border-bottom-color:var(--primary);}
+    .tab:hover:not(.active){color:var(--on-surface);}
+
+    /* ── Detail cards ── */
+    .card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+    .card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;border-bottom:1px solid var(--outline-variant);}
+    .card-title{font-size:14px;font-weight:500;}
     .card-sub{font-size:12px;color:var(--on-surface-variant);margin-top:2px;}
-    .data-table{width:100%;border-collapse:collapse;}
-    .data-table th{text-align:left;padding:10px 22px;font-size:11px;font-weight:500;color:var(--on-surface-variant);background:var(--surface-container-low);border-bottom:1px solid var(--outline-variant);white-space:nowrap;}
-    .data-table td{padding:13px 22px;font-size:13px;border-bottom:1px solid var(--outline-variant);vertical-align:middle;}
-    .data-table tr:last-child td{border-bottom:none;}
-    .data-table tr:hover td{background:var(--surface-container-low);}
-    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap;}
+    .info-row{display:flex;justify-content:space-between;align-items:center;padding:11px 20px;border-bottom:1px solid var(--outline-variant);font-size:13px;}
+    .info-row:last-child{border-bottom:none;}
+    .info-label{color:var(--on-surface-variant);}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
     .badge.success{background:var(--success-container);color:#002810;}
     .badge.warning{background:var(--warning-container);color:#3D2C00;}
     .badge.primary{background:var(--primary-container);color:#001257;}
-    .badge.error{background:var(--error-container);color:#410002;}
+
+    /* ── Timeline ── */
+    .timeline-item{display:flex;gap:14px;padding:13px 20px;border-bottom:1px solid var(--outline-variant);}
+    .timeline-item:last-child{border-bottom:none;}
+    .timeline-dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+    /* ── Buttons ── */
     .btn-primary{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--primary);color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:500;font-family:'Roboto',sans-serif;cursor:pointer;transition:opacity 0.15s;}
     .btn-primary:hover{opacity:0.88;}
     .btn-outlined{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:20px;font-size:13px;font-weight:500;font-family:'Roboto',sans-serif;cursor:pointer;}
-    .btn-servicing{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:var(--primary-container);color:var(--on-primary-container);border:none;border-radius:20px;font-size:12px;font-weight:500;font-family:'Roboto',sans-serif;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
-    .btn-servicing:hover{background:var(--primary);color:#fff;}
-    .btn-servicing .material-symbols-outlined{font-size:14px;}
+
+    /* ── MS read-only notice ── */
+    .ms-notice{background:var(--primary-container);border:1px solid var(--outline-variant);border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--on-primary-container);margin-bottom:20px;}
+
+    /* ── Proto banner ── */
     .proto-banner{background:var(--primary-container);border-top:1px solid var(--outline-variant);padding:10px 24px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--on-primary-container);flex-shrink:0;}
-    .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
-    .stat-card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:8px;}
-    .stat-label{font-size:12px;color:var(--on-surface-variant);}
-    .stat-value{font-size:26px;font-weight:500;}
-</style>
+  </style>
 </head>
 <body>
+
+  <!-- App Bar -->
   <div class="app-bar">
     <span class="app-bar-logo">ILIA</span>
     <div class="app-bar-divider"></div>
@@ -85,110 +160,255 @@
       <div class="avatar">JA</div>
     </div>
   </div>
+
   <div class="layout">
-    <nav class="nav-rail"><a class="nav-item" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="nav-label">Dashboard</span></a><a class="nav-item" href="policies.html"><span class="material-symbols-outlined">policy</span><span class="nav-label">Policies</span></a><a class="nav-item" href="trusts.html"><span class="material-symbols-outlined">account_balance</span><span class="nav-label">Trusts</span></a><a class="nav-item active" href="view-policies.html"><span class="material-symbols-outlined">shield</span><span class="nav-label">View Policies</span></a><a class="nav-item" href="action-items.html"><span class="material-symbols-outlined">task_alt</span><span class="nav-label">Action Items</span><span class="nav-badge">18</span></a><div class="nav-spacer"></div><a class="nav-item" href="#"><span class="material-symbols-outlined">settings</span><span class="nav-label">Settings</span></a></nav>
-    <main class="content"><style>
-    .tab-bar{display:flex;border-bottom:1px solid var(--outline-variant);margin-bottom:24px;}
-    .tab{padding:12px 20px;font-size:14px;font-weight:500;color:var(--on-surface-variant);cursor:pointer;border-bottom:3px solid transparent;transition:color 0.15s,border-color 0.15s;text-decoration:none;}
-    .tab.active{color:var(--primary);border-bottom-color:var(--primary);}
-    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-    .info-row{display:flex;justify-content:space-between;padding:12px 22px;border-bottom:1px solid var(--outline-variant);font-size:14px;}
-    .info-row:last-child{border-bottom:none;}
-    .info-label{color:var(--on-surface-variant);}
-    .timeline-item{display:flex;gap:16px;padding:14px 22px;border-bottom:1px solid var(--outline-variant);}
-    .timeline-item:last-child{border-bottom:none;}
-    .timeline-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .band{padding:10px 22px;font-size:13px;font-weight:500;}
-    .band.success{background:var(--success);color:#fff;}
-    .band.warning{background:var(--warning);color:#3D2C00;}
-</style>
-  <!-- Breadcrumb -->
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:13px;color:var(--on-surface-variant);">
-    <a href="view-policies.html" style="color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:4px;">
-      <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span>My Policies
-    </a>
-    <span>›</span><span style="color:var(--on-surface)">Servicing — LS22972246</span>
-  </div>
 
-  <div class="page-header">
-    <div>
-      <div class="page-title">Policy Servicing</div>
-      <div class="page-sub">LS22972246 · Smith, John · North American · Kai-Zen IUL · Year 3</div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button class="btn-outlined"><span class="material-symbols-outlined" style="font-size:16px">download</span>Download Statement</button>
-      <button class="btn-primary"><span class="material-symbols-outlined" style="font-size:16px">draw</span>Request Signature</button>
-    </div>
-  </div>
+    <!-- MS Portal Nav Rail -->
+    <nav class="nav-rail">
+      <a class="nav-item" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="nav-label">Dashboard</span></a>
+      <a class="nav-item" href="policies.html"><span class="material-symbols-outlined">policy</span><span class="nav-label">Policies</span></a>
+      <a class="nav-item" href="trusts.html"><span class="material-symbols-outlined">account_balance</span><span class="nav-label">Trusts</span></a>
+      <a class="nav-item active" href="view-policies.html"><span class="material-symbols-outlined">shield</span><span class="nav-label">View Policies</span></a>
+      <a class="nav-item" href="action-items.html"><span class="material-symbols-outlined">task_alt</span><span class="nav-label">Action Items</span><span class="nav-badge">18</span></a>
+      <div class="nav-spacer"></div>
+      <a class="nav-item" href="#"><span class="material-symbols-outlined">settings</span><span class="nav-label">Settings</span></a>
+    </nav>
 
-  <div class="stat-row">
-    <div class="stat-card"><div class="stat-label">Policy Status</div><div style="margin-top:6px;"><span class="badge success" style="font-size:13px;padding:5px 14px;">In Force</span></div></div>
-    <div class="stat-card"><div class="stat-label">Face Value</div><div class="stat-value" style="color:var(--success)">$1,269,884</div></div>
-    <div class="stat-card"><div class="stat-label">Current Loan Balance</div><div class="stat-value" style="font-size:20px;">$130,650</div></div>
-    <div class="stat-card"><div class="stat-label">Next Tranche Due</div><div class="stat-value" style="font-size:18px;color:var(--warning)">06/01/2026</div></div>
-  </div>
+    <!-- Client Servicing Portal (embedded inside MS Portal) -->
+    <div class="portal-outer">
 
-  <div class="tab-bar">
-    <a class="tab active" href="#">Overview</a>
-    <a class="tab" href="#">Loan / Tranche</a>
-    <a class="tab" href="#">Documents</a>
-    <a class="tab" href="#">Payment History</a>
-    <a class="tab" href="#">Illustration</a>
-  </div>
+      <!-- Client Portal Left Sidebar -->
+      <div class="client-sidebar">
+        <div class="client-sidebar-logo">
+          <div class="ilia-wordmark">
+            <div style="font-size:22px;font-weight:800;color:var(--primary);letter-spacing:-1px;">ilia</div>
+            <div class="ilia-wordmark-text">Interactive<br>Learning<br>Information<br><strong>Assistant</strong></div>
+          </div>
+        </div>
+        <div class="sidebar-dots">
+          <div class="dot" style="background:#2A62E4;"></div>
+          <div class="dot" style="background:#18A862;"></div>
+          <div class="dot" style="background:#E6A82E;"></div>
+          <div class="dot" style="background:#BA1A1A;"></div>
+        </div>
+        <div class="sponsored">Sponsored By</div>
 
-  <div class="info-grid">
-    <div class="card">
-      <div class="card-header"><div class="card-title">Policy Details</div></div>
-      <div class="info-row"><span class="info-label">Policy Number</span><strong>LS22972246</strong></div>
-      <div class="info-row"><span class="info-label">Carrier</span><strong>North American</strong></div>
-      <div class="info-row"><span class="info-label">Product</span><strong>Kai-Zen IUL</strong></div>
-      <div class="info-row"><span class="info-label">Issue Date</span><strong>04/15/2022</strong></div>
-      <div class="info-row"><span class="info-label">Policy Year</span><strong>Year 3</strong></div>
-      <div class="info-row"><span class="info-label">Annual Premium</span><strong>$43,550</strong></div>
-      <div class="info-row"><span class="info-label">Face Value</span><strong>$1,269,884</strong></div>
-      <div class="info-row"><span class="info-label">Surrender Charge Period</span><strong>10 years</strong></div>
-    </div>
+        <div class="client-nav-section">
+          <a class="client-nav-item active" href="#">
+            <span class="material-symbols-outlined">dashboard</span>
+            Servicing Dashboard
+            <span class="material-symbols-outlined client-nav-chevron">expand_more</span>
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">payments</span>
+            Payments
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">description</span>
+            Documents
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">event_repeat</span>
+            Annual Review
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">bar_chart</span>
+            Current Performance
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">manage_accounts</span>
+            Insured Details &amp; Changes
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">account_balance_wallet</span>
+            Claims &amp; Distributions
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">help</span>
+            FAQs and Guides
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">campaign</span>
+            Feedback &amp; Referrals
+          </a>
+          <a class="client-nav-item" href="#">
+            <span class="material-symbols-outlined">mail</span>
+            Contact Us
+          </a>
+        </div>
+      </div>
 
-    <div class="card">
-      <div class="card-header"><div class="card-title">Trust & Loan Summary</div></div>
-      <div class="info-row"><span class="info-label">Trust ID</span><strong>TR-20220415</strong></div>
-      <div class="info-row"><span class="info-label">Trustee</span><strong>NIW Trust Services</strong></div>
-      <div class="info-row"><span class="info-label">Lender</span><strong>Premium Finance Bank</strong></div>
-      <div class="info-row"><span class="info-label">Total Tranches Funded</span><strong>3 of 5</strong></div>
-      <div class="info-row"><span class="info-label">Total Loan Balance</span><strong>$130,650</strong></div>
-      <div class="info-row"><span class="info-label">Interest Rate</span><strong>SOFR + 2.5%</strong></div>
-      <div class="info-row"><span class="info-label">Next Tranche Amount</span><strong>$43,550</strong></div>
-      <div class="info-row"><span class="info-label">Next Due Date</span><strong style="color:var(--warning)">06/01/2026</strong></div>
-    </div>
-  </div>
+      <!-- Client Portal Main -->
+      <div class="client-main">
 
-  <div class="card">
-    <div class="card-header">
-      <div><div class="card-title">Servicing Timeline</div><div class="card-sub">Recent activity on this policy</div></div>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-dot" style="background:var(--success-container)"><span class="material-symbols-outlined" style="font-size:18px;color:var(--success)">check_circle</span></div>
-      <div style="flex:1;"><div style="font-size:14px;font-weight:500;">Tranche 3 funded successfully</div><div style="font-size:12px;color:var(--on-surface-variant);margin-top:3px;">$43,550 disbursed to North American · Confirmed by lender</div></div>
-      <div style="font-size:12px;color:var(--on-surface-variant);">04/15/2026</div>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-dot" style="background:var(--primary-container)"><span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">description</span></div>
-      <div style="flex:1;"><div style="font-size:14px;font-weight:500;">Annual statement issued</div><div style="font-size:12px;color:var(--on-surface-variant);margin-top:3px;">Year 3 policy statement available · Carrier confirmed in-force status</div></div>
-      <div style="font-size:12px;color:var(--on-surface-variant);">03/01/2026</div>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-dot" style="background:var(--success-container)"><span class="material-symbols-outlined" style="font-size:18px;color:var(--success)">check_circle</span></div>
-      <div style="flex:1;"><div style="font-size:14px;font-weight:500;">Tranche 2 funded successfully</div><div style="font-size:12px;color:var(--on-surface-variant);margin-top:3px;">$43,550 disbursed · Year 2</div></div>
-      <div style="font-size:12px;color:var(--on-surface-variant);">04/15/2025</div>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-dot" style="background:var(--success-container)"><span class="material-symbols-outlined" style="font-size:18px;color:var(--success)">how_to_reg</span></div>
-      <div style="flex:1;"><div style="font-size:14px;font-weight:500;">Trust established · Policy issued</div><div style="font-size:12px;color:var(--on-surface-variant);margin-top:3px;">NIW Trust Services established · North American policy LS22972246 issued</div></div>
-      <div style="font-size:12px;color:var(--on-surface-variant);">04/15/2022</div>
-    </div>
-  </div>
-</main>
-  </div>
+        <!-- Hero Banner -->
+        <div class="hero">
+          <div class="hero-ms-badge">
+            <span class="material-symbols-outlined" style="font-size:14px;">visibility</span>
+            Viewing as Master Settlor
+          </div>
+          <div class="hero-accent"></div>
+          <div class="hero-title">Welcome John Smith</div>
+          <div class="hero-body">
+            Now that you've successfully enrolled you will be able to view and manage your policy here.
+            You can view documents, make a yearly contribution payment, file a claim, change your details,
+            and get answers to your policy questions.
+          </div>
+        </div>
+
+        <!-- Policy Selector -->
+        <div class="selector-zone" style="padding-bottom:20px;border-bottom:1px solid var(--outline-variant);">
+          <div class="selector-label">Select policy to view details</div>
+          <div class="selector-row">
+            <div class="policy-select-wrap">
+              <select class="policy-select">
+                <option>4200ani · Kai-Zen · Allianz Life · 59T</option>
+                <option selected>LS22972246 · Kai-Zen · North American · IUL</option>
+                <option>PF33001 · Kai-Zen · Pacific Life · IUL</option>
+              </select>
+              <span class="material-symbols-outlined select-chevron">expand_more</span>
+            </div>
+          </div>
+          <div class="policy-year-note">
+            Policy Number — LS22972246 <strong>Kai-Zen</strong> (Policy Year 3 / (04/15/2022 – 04/15/2026))&nbsp; Year 4 credits (growth) are applied at the beginning of the following policy year.
+          </div>
+        </div>
+
+        <!-- Stat Strip -->
+        <div class="stat-strip">
+          <!-- Payment due card -->
+          <div class="stat-card payment">
+            <div class="stat-label">Payment due by</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.85);margin-bottom:2px;">06/01/2026</div>
+            <div class="stat-value">$43,550</div>
+            <button class="btn-view-payments">View Payments</button>
+          </div>
+          <!-- Growth Rate -->
+          <div class="stat-card">
+            <div class="stat-label">Last Year's Policy Growth Rate</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+              <span class="material-symbols-outlined" style="font-size:28px;color:var(--on-surface-variant);">monitoring</span>
+              <div class="stat-na">N/A</div>
+            </div>
+          </div>
+          <!-- Net Death Benefit -->
+          <div class="stat-card">
+            <div class="stat-label">Estimated Net Death Benefit</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+              <span class="material-symbols-outlined" style="font-size:28px;color:var(--on-surface-variant);">trending_up</span>
+              <div class="stat-value" style="font-size:20px;">$1,269,884</div>
+            </div>
+          </div>
+          <!-- Net Cash Value -->
+          <div class="stat-card">
+            <div class="stat-label">Estimated Net Cash Value</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+              <span class="material-symbols-outlined" style="font-size:28px;color:var(--on-surface-variant);">savings</span>
+              <div class="stat-value" style="font-size:20px;">$0.00</div>
+            </div>
+          </div>
+          <!-- Anniversary Date -->
+          <div class="stat-card">
+            <div class="stat-label">Policy Anniversary Date</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+              <span class="material-symbols-outlined" style="font-size:28px;color:var(--on-surface-variant);">alarm</span>
+              <div class="stat-value" style="font-size:18px;">04/15/2027</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inner content -->
+        <div class="inner-content">
+
+          <!-- MS read-only notice -->
+          <div class="ms-notice">
+            <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary);">info</span>
+            <span>You are viewing this policy as <strong>Master Settlor</strong>. Some actions may be restricted. Contact NIW Trust Services for servicing requests.</span>
+          </div>
+
+          <!-- Tab bar -->
+          <div class="tab-bar">
+            <div class="tab active">Overview</div>
+            <div class="tab">Loan / Tranche</div>
+            <div class="tab">Documents</div>
+            <div class="tab">Payment History</div>
+            <div class="tab">Illustration</div>
+          </div>
+
+          <!-- Detail cards -->
+          <div class="info-grid">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Policy Details</div>
+                  <div class="card-sub">LS22972246 · North American · Kai-Zen IUL</div>
+                </div>
+                <span class="badge success">In Force</span>
+              </div>
+              <div class="info-row"><span class="info-label">Policy Number</span><strong>LS22972246</strong></div>
+              <div class="info-row"><span class="info-label">Carrier</span><strong>North American</strong></div>
+              <div class="info-row"><span class="info-label">Product</span><strong>Kai-Zen IUL</strong></div>
+              <div class="info-row"><span class="info-label">Issue Date</span><strong>04/15/2022</strong></div>
+              <div class="info-row"><span class="info-label">Policy Year</span><strong>Year 3</strong></div>
+              <div class="info-row"><span class="info-label">Annual Premium</span><strong>$43,550</strong></div>
+              <div class="info-row"><span class="info-label">Face Value</span><strong>$1,269,884</strong></div>
+              <div class="info-row"><span class="info-label">Surrender Charge Period</span><strong>10 years</strong></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div><div class="card-title">Trust &amp; Loan Summary</div></div>
+              </div>
+              <div class="info-row"><span class="info-label">Trust ID</span><strong>TR-20220415</strong></div>
+              <div class="info-row"><span class="info-label">Trustee</span><strong>NIW Trust Services</strong></div>
+              <div class="info-row"><span class="info-label">Lender</span><strong>Premium Finance Bank</strong></div>
+              <div class="info-row"><span class="info-label">Total Tranches Funded</span><strong>3 of 5</strong></div>
+              <div class="info-row"><span class="info-label">Total Loan Balance</span><strong>$130,650</strong></div>
+              <div class="info-row"><span class="info-label">Interest Rate</span><strong>SOFR + 2.5%</strong></div>
+              <div class="info-row"><span class="info-label">Next Tranche Amount</span><strong>$43,550</strong></div>
+              <div class="info-row"><span class="info-label">Next Due Date</span><strong style="color:var(--warning)">06/01/2026</strong></div>
+            </div>
+          </div>
+
+          <!-- Servicing Timeline -->
+          <div class="card">
+            <div class="card-header">
+              <div><div class="card-title">Servicing Timeline</div><div class="card-sub">Recent activity on this policy</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--success-container)"><span class="material-symbols-outlined" style="font-size:18px;color:var(--success)">check_circle</span></div>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Tranche 3 funded successfully</div><div style="font-size:12px;color:var(--on-surface-variant);margin-top:3px;">$43,550 disbursed to North American · Confirmed by lender</div></div>
+              <div style="font-size:12px;color:var(--on-surface-variant);">04/15/2026</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--primary-container)"><span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">description</span></div>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Annual statement issued</div><div style="font-size:12px;color:var(--on-surface-variant);margin-top:3px;">Year 3 policy statement available · Carrier confirmed in-force status</div></div>
+              <div style="font-size:12px;color:var(--on-surface-variant);">03/01/2026</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--success-container)"><span class="material-symbols-outlined" style="font-size:18px;color:var(--success)">check_circle</span></div>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Tranche 2 funded successfully</div><div style="font-size:12px;color:var(--on-surface-variant);margin-top:3px;">$43,550 disbursed · Year 2</div></div>
+              <div style="font-size:12px;color:var(--on-surface-variant);">04/15/2025</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--success-container)"><span class="material-symbols-outlined" style="font-size:18px;color:var(--success)">how_to_reg</span></div>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Trust established · Policy issued</div><div style="font-size:12px;color:var(--on-surface-variant);margin-top:3px;">NIW Trust Services established · North American policy LS22972246 issued</div></div>
+              <div style="font-size:12px;color:var(--on-surface-variant);">04/15/2022</div>
+            </div>
+          </div>
+
+          <!-- Back link -->
+          <div style="margin-top:8px;">
+            <a href="view-policies.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-size:13px;text-decoration:none;font-weight:500;">
+              <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+              Back to My Policies
+            </a>
+          </div>
+        </div>
+      </div><!-- /client-main -->
+    </div><!-- /portal-outer -->
+  </div><!-- /layout -->
+
   <div class="proto-banner">
     <span class="material-symbols-outlined" style="font-size:16px;color:var(--primary)">construction</span>
     <span><strong>Prototype</strong> — Master Settlor Portal · ILIA Design Kit v1.0 · NIW / Simplicity Group</span>
