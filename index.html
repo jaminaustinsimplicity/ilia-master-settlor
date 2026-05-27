@@ -34,519 +34,383 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Roboto', system-ui, sans-serif; background: var(--surface-container-low); color: var(--on-surface); display: flex; flex-direction: column; min-height: 100vh; }
 
-    /* ── TOP APP BAR ── */
-    .app-bar {
-      background: var(--primary);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 0 24px;
-      height: 64px;
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    /* ── FIRE ANIMATION KEYFRAMES ── */
+    @keyframes flicker1 {
+      0%,100% { transform: scaleY(1) scaleX(1) translateY(0); opacity: 0.9; }
+      25% { transform: scaleY(1.15) scaleX(0.95) translateY(-3px); opacity: 1; }
+      50% { transform: scaleY(0.92) scaleX(1.05) translateY(1px); opacity: 0.85; }
+      75% { transform: scaleY(1.08) scaleX(0.97) translateY(-2px); opacity: 0.95; }
     }
-    .app-bar-logo { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
-    .app-bar-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.3); }
-    .app-bar-title { font-size: 18px; font-weight: 500; flex: 1; }
-    .app-bar-actions { display: flex; align-items: center; gap: 8px; }
-    .icon-btn {
-      width: 40px; height: 40px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: background 0.15s;
-      position: relative;
+    @keyframes flicker2 {
+      0%,100% { transform: scaleY(1) scaleX(1) translateY(0) rotate(-2deg); opacity: 0.7; }
+      30% { transform: scaleY(1.2) scaleX(0.9) translateY(-4px) rotate(2deg); opacity: 0.9; }
+      60% { transform: scaleY(0.88) scaleX(1.08) translateY(2px) rotate(-1deg); opacity: 0.6; }
+      80% { transform: scaleY(1.1) scaleX(0.95) translateY(-3px) rotate(3deg); opacity: 0.8; }
     }
-    .icon-btn:hover { background: rgba(255,255,255,0.15); }
-    .icon-btn .material-symbols-outlined { font-size: 22px; }
-    .notif-dot {
-      position: absolute; top: 6px; right: 6px;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--warning); border: 2px solid var(--primary);
+    @keyframes flicker3 {
+      0%,100% { transform: scaleY(1) translateY(0) rotate(1deg); opacity: 0.5; }
+      20% { transform: scaleY(1.25) translateY(-5px) rotate(-3deg); opacity: 0.7; }
+      55% { transform: scaleY(0.85) translateY(2px) rotate(2deg); opacity: 0.4; }
+      80% { transform: scaleY(1.12) translateY(-3px) rotate(-1deg); opacity: 0.6; }
     }
-    .avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 600; cursor: pointer;
+    @keyframes riseUp {
+      0% { transform: translateY(0) scaleX(1); opacity: 0.6; }
+      100% { transform: translateY(-28px) scaleX(0.3); opacity: 0; }
     }
-    .material-symbols-outlined { font-family: 'Material Symbols Outlined'; line-height: 1; }
+    @keyframes glowPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(230,100,20,0); }
+      50% { box-shadow: 0 0 24px 8px rgba(230,100,20,0.25), 0 0 48px 16px rgba(255,160,20,0.1); }
+    }
+    @keyframes borderBurn {
+      0%,100% { border-color: var(--outline-variant); }
+      30% { border-color: rgba(255,140,0,0.7); }
+      60% { border-color: rgba(255,80,0,0.5); }
+    }
 
-    /* ── LAYOUT ── */
-    .layout { display: flex; flex: 1; overflow: hidden; }
-
-    /* ── NAV RAIL ── */
-    .nav-rail {
-      width: 88px;
-      background: var(--surface-container);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px 0;
-      gap: 4px;
-      border-right: 1px solid var(--outline-variant);
-      flex-shrink: 0;
-      position: sticky;
-      top: 64px;
-      height: calc(100vh - 64px);
-      overflow-y: auto;
-    }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 4px; padding: 10px 8px; border-radius: 16px;
-      cursor: pointer; width: 76px; transition: background 0.15s;
-      text-decoration: none;
-    }
-    .nav-item:hover { background: var(--surface-container-high); }
-    .nav-item.active { background: var(--primary-container); }
-    .nav-item .material-symbols-outlined { font-size: 22px; color: var(--on-surface-variant); }
-    .nav-item.active .material-symbols-outlined { color: var(--primary); }
-    .nav-label { font-size: 10px; color: var(--on-surface-variant); text-align: center; line-height: 1.3; }
-    .nav-item.active .nav-label { color: var(--primary); font-weight: 500; }
-    .nav-spacer { flex: 1; }
-
-    /* ── MAIN CONTENT ── */
-    .content { flex: 1; padding: 28px 32px; overflow-y: auto; }
-
-    /* ── PAGE HEADER ── */
-    .page-header { margin-bottom: 24px; }
-    .page-title { font-size: 24px; font-weight: 500; color: var(--on-surface); }
-    .page-sub { font-size: 14px; color: var(--on-surface-variant); margin-top: 4px; }
-
-    /* ── STAT CARDS ── */
-    .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+    /* ── STAT CARD FIRE ── */
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--outline-variant);
       border-radius: 16px;
       padding: 20px 22px;
       display: flex; flex-direction: column; gap: 8px;
-    }
-    .stat-card-header { display: flex; align-items: center; justify-content: space-between; }
-    .stat-icon {
-      width: 40px; height: 40px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .stat-icon .material-symbols-outlined { font-size: 20px; }
-    .stat-label { font-size: 12px; color: var(--on-surface-variant); font-weight: 400; }
-    .stat-value { font-size: 28px; font-weight: 500; }
-    .stat-delta { font-size: 12px; display: flex; align-items: center; gap: 4px; }
-    .delta-up { color: var(--success); }
-    .delta-warn { color: var(--warning); }
-
-    /* ── SECTION GRID ── */
-    .section-grid { display: grid; grid-template-columns: 1fr 380px; gap: 16px; margin-bottom: 24px; }
-
-    /* ── CARDS ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--outline-variant);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-    .card-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 22px 14px;
-      border-bottom: 1px solid var(--outline-variant);
-    }
-    .card-title { font-size: 15px; font-weight: 500; color: var(--on-surface); }
-    .card-sub { font-size: 12px; color: var(--on-surface-variant); margin-top: 2px; }
-    .card-action { font-size: 13px; color: var(--primary); font-weight: 500; cursor: pointer; white-space: nowrap; }
-
-    /* ── TABLE ── */
-    .data-table { width: 100%; border-collapse: collapse; }
-    .data-table th {
-      text-align: left; padding: 10px 22px;
-      font-size: 11px; font-weight: 500; letter-spacing: 0.4px;
-      color: var(--on-surface-variant);
-      background: var(--surface-container-low);
-      border-bottom: 1px solid var(--outline-variant);
-      white-space: nowrap;
-    }
-    .data-table td {
-      padding: 13px 22px;
-      font-size: 13px;
-      color: var(--on-surface);
-      border-bottom: 1px solid var(--outline-variant);
-    }
-    .data-table tr:last-child td { border-bottom: none; }
-    .data-table tr:hover td { background: var(--surface-container-low); cursor: pointer; }
-    .client-name { font-weight: 500; }
-    .client-id { font-size: 11px; color: var(--on-surface-variant); margin-top: 2px; }
-
-    /* ── BADGES ── */
-    .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 3px 10px; border-radius: 20px;
-      font-size: 11px; font-weight: 500; white-space: nowrap;
-    }
-    .badge.success { background: var(--success-container); color: #002810; }
-    .badge.warning { background: var(--warning-container); color: #3D2C00; }
-    .badge.primary { background: var(--primary-container); color: #001257; }
-    .badge.error { background: var(--error-container); color: #410002; }
-    .badge.neutral { background: var(--surface-container-high); color: var(--on-surface-variant); }
-
-    /* ── ACTIVITY FEED ── */
-    .activity-list { padding: 8px 0; }
-    .activity-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 12px 22px;
-      border-bottom: 1px solid var(--outline-variant);
-      transition: background 0.15s;
+      position: relative;
+      overflow: visible;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
       cursor: pointer;
     }
-    .activity-item:last-child { border-bottom: none; }
-    .activity-item:hover { background: var(--surface-container-low); }
-    .activity-dot {
-      width: 32px; height: 32px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; margin-top: 2px;
+    .stat-card:hover {
+      transform: translateY(-3px);
+      animation: glowPulse 0.8s ease-in-out infinite, borderBurn 0.6s ease-in-out infinite;
     }
-    .activity-dot .material-symbols-outlined { font-size: 16px; }
-    .activity-text { flex: 1; }
-    .activity-title { font-size: 13px; font-weight: 500; color: var(--on-surface); line-height: 1.4; }
-    .activity-meta { font-size: 11px; color: var(--on-surface-variant); margin-top: 3px; }
-    .activity-time { font-size: 11px; color: var(--on-surface-variant); white-space: nowrap; flex-shrink: 0; }
 
-    /* ── QUICK ACTIONS ── */
-    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px 22px; }
-    .quick-action-btn {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 8px; padding: 16px 12px;
-      background: var(--surface-container-low);
-      border: 1px solid var(--outline-variant);
-      border-radius: 12px;
-      cursor: pointer; transition: all 0.15s;
-      text-align: center;
+    /* Fire container — sits above the card */
+    .fire-container {
+      position: absolute;
+      top: -60px;
+      left: 0; right: 0;
+      height: 70px;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 5;
     }
-    .quick-action-btn:hover { background: var(--primary-container); border-color: var(--primary); }
-    .quick-action-btn:hover .material-symbols-outlined { color: var(--primary); }
-    .quick-action-btn:hover .qa-label { color: var(--primary); }
-    .quick-action-btn .material-symbols-outlined { font-size: 24px; color: var(--on-surface-variant); }
-    .qa-label { font-size: 12px; font-weight: 500; color: var(--on-surface-variant); line-height: 1.3; }
+    .stat-card:hover .fire-container { opacity: 1; }
 
-    /* ── PROTOTYPE BANNER ── */
-    .proto-banner {
-      background: var(--primary-container);
-      border-top: 1px solid var(--outline-variant);
-      padding: 10px 24px;
-      display: flex; align-items: center; gap: 10px;
-      font-size: 12px; color: var(--on-primary-container);
+    /* Individual flame shapes */
+    .flame {
+      border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+      transform-origin: bottom center;
       flex-shrink: 0;
     }
-    .proto-banner .material-symbols-outlined { font-size: 16px; color: var(--primary); }
-
-    @media (max-width: 1100px) {
-      .stat-row { grid-template-columns: repeat(2, 1fr); }
-      .section-grid { grid-template-columns: 1fr; }
+    .flame-core {
+      width: 18px; height: 36px;
+      background: linear-gradient(to top, #FF6B00, #FFB300, #FFF176);
+      animation: flicker1 0.45s ease-in-out infinite;
     }
+    .flame-mid-l {
+      width: 13px; height: 28px;
+      background: linear-gradient(to top, #FF4500, #FF8C00, #FFD700);
+      animation: flicker2 0.38s ease-in-out infinite 0.1s;
+      margin-bottom: 2px;
+    }
+    .flame-mid-r {
+      width: 13px; height: 26px;
+      background: linear-gradient(to top, #FF4500, #FF7000, #FFC200);
+      animation: flicker2 0.42s ease-in-out infinite 0.05s;
+      margin-bottom: 2px;
+    }
+    .flame-outer-l {
+      width: 9px; height: 18px;
+      background: linear-gradient(to top, #FF3300, #FF6600, #FFA500);
+      animation: flicker3 0.35s ease-in-out infinite 0.08s;
+      margin-bottom: 4px;
+    }
+    .flame-outer-r {
+      width: 9px; height: 16px;
+      background: linear-gradient(to top, #FF3300, #FF5500, #FF9500);
+      animation: flicker3 0.4s ease-in-out infinite 0.12s;
+      margin-bottom: 4px;
+    }
+
+    /* Ember particles */
+    .ember {
+      position: absolute;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #FF8C00;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .stat-card:hover .ember {
+      animation: riseUp 0.8s ease-out infinite;
+    }
+    .ember:nth-child(1) { left: 25%; animation-delay: 0s; background: #FFB300; }
+    .ember:nth-child(2) { left: 40%; animation-delay: 0.2s; background: #FF6B00; width:3px; height:3px; }
+    .ember:nth-child(3) { left: 55%; animation-delay: 0.4s; background: #FFD700; }
+    .ember:nth-child(4) { left: 70%; animation-delay: 0.15s; background: #FF4500; width:3px; height:3px; }
+    .ember:nth-child(5) { left: 15%; animation-delay: 0.35s; background: #FFA500; }
+
+    /* Card shimmer on hover */
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,120,0,0.06) 0%, rgba(255,200,0,0.04) 50%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .stat-card:hover::after { opacity: 1; }
+
+    /* ── REST OF STYLES ── */
+    .app-bar {
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; gap: 16px;
+      padding: 0 24px; height: 64px; flex-shrink: 0;
+      position: sticky; top: 0; z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .app-bar-logo { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+    .app-bar-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.3); }
+    .app-bar-title { font-size: 18px; font-weight: 500; flex: 1; }
+    .app-bar-actions { display: flex; align-items: center; gap: 8px; }
+    .icon-btn { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 0.15s; position:relative; }
+    .icon-btn:hover { background: rgba(255,255,255,0.15); }
+    .icon-btn .material-symbols-outlined { font-size: 22px; }
+    .notif-dot { position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%; background:var(--warning); border:2px solid var(--primary); }
+    .avatar { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; cursor:pointer; }
+    .material-symbols-outlined { font-family:'Material Symbols Outlined'; line-height:1; }
+
+    .layout { display:flex; flex:1; overflow:hidden; }
+    .nav-rail { width:88px; background:var(--surface-container); display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:4px; border-right:1px solid var(--outline-variant); flex-shrink:0; position:sticky; top:64px; height:calc(100vh - 64px); overflow-y:auto; }
+    .nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 8px; border-radius:16px; cursor:pointer; width:76px; transition:background 0.15s; text-decoration:none; }
+    .nav-item:hover { background:var(--surface-container-high); }
+    .nav-item.active { background:var(--primary-container); }
+    .nav-item .material-symbols-outlined { font-size:22px; color:var(--on-surface-variant); }
+    .nav-item.active .material-symbols-outlined { color:var(--primary); }
+    .nav-label { font-size:10px; color:var(--on-surface-variant); text-align:center; line-height:1.3; }
+    .nav-item.active .nav-label { color:var(--primary); font-weight:500; }
+    .nav-spacer { flex:1; }
+
+    .content { flex:1; padding:28px 32px; overflow-y:auto; }
+    .page-header { margin-bottom:24px; }
+    .page-title { font-size:24px; font-weight:500; }
+    .page-sub { font-size:14px; color:var(--on-surface-variant); margin-top:4px; }
+
+    .stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+    .stat-card-header { display:flex; align-items:center; justify-content:space-between; }
+    .stat-icon { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+    .stat-icon .material-symbols-outlined { font-size:20px; }
+    .stat-label { font-size:12px; color:var(--on-surface-variant); }
+    .stat-value { font-size:28px; font-weight:500; }
+    .stat-delta { font-size:12px; display:flex; align-items:center; gap:4px; }
+    .delta-up { color:var(--success); }
+    .delta-warn { color:var(--warning); }
+
+    .section-grid { display:grid; grid-template-columns:1fr 380px; gap:16px; margin-bottom:24px; }
+    .card { background:var(--surface); border:1px solid var(--outline-variant); border-radius:16px; overflow:hidden; }
+    .card-header { display:flex; align-items:center; justify-content:space-between; padding:18px 22px 14px; border-bottom:1px solid var(--outline-variant); }
+    .card-title { font-size:15px; font-weight:500; }
+    .card-sub { font-size:12px; color:var(--on-surface-variant); margin-top:2px; }
+    .card-action { font-size:13px; color:var(--primary); font-weight:500; cursor:pointer; white-space:nowrap; }
+
+    .data-table { width:100%; border-collapse:collapse; }
+    .data-table th { text-align:left; padding:10px 22px; font-size:11px; font-weight:500; letter-spacing:0.4px; color:var(--on-surface-variant); background:var(--surface-container-low); border-bottom:1px solid var(--outline-variant); white-space:nowrap; }
+    .data-table td { padding:13px 22px; font-size:13px; border-bottom:1px solid var(--outline-variant); }
+    .data-table tr:last-child td { border-bottom:none; }
+    .data-table tr:hover td { background:var(--surface-container-low); cursor:pointer; }
+    .client-name { font-weight:500; }
+    .client-id { font-size:11px; color:var(--on-surface-variant); margin-top:2px; }
+
+    .badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; white-space:nowrap; }
+    .badge.success { background:var(--success-container); color:#002810; }
+    .badge.warning { background:var(--warning-container); color:#3D2C00; }
+    .badge.primary { background:var(--primary-container); color:#001257; }
+    .badge.error { background:var(--error-container); color:#410002; }
+
+    .activity-list { padding:8px 0; }
+    .activity-item { display:flex; align-items:flex-start; gap:12px; padding:12px 22px; border-bottom:1px solid var(--outline-variant); transition:background 0.15s; cursor:pointer; }
+    .activity-item:last-child { border-bottom:none; }
+    .activity-item:hover { background:var(--surface-container-low); }
+    .activity-dot { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    .activity-dot .material-symbols-outlined { font-size:16px; }
+    .activity-text { flex:1; }
+    .activity-title { font-size:13px; font-weight:500; line-height:1.4; }
+    .activity-meta { font-size:11px; color:var(--on-surface-variant); margin-top:3px; }
+    .activity-time { font-size:11px; color:var(--on-surface-variant); white-space:nowrap; flex-shrink:0; }
+
+    .quick-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:16px 22px; }
+    .quick-action-btn { display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 12px; background:var(--surface-container-low); border:1px solid var(--outline-variant); border-radius:12px; cursor:pointer; transition:all 0.15s; text-align:center; }
+    .quick-action-btn:hover { background:var(--primary-container); border-color:var(--primary); }
+    .quick-action-btn:hover .material-symbols-outlined { color:var(--primary); }
+    .quick-action-btn:hover .qa-label { color:var(--primary); }
+    .quick-action-btn .material-symbols-outlined { font-size:24px; color:var(--on-surface-variant); }
+    .qa-label { font-size:12px; font-weight:500; color:var(--on-surface-variant); line-height:1.3; }
+
+    .proto-banner { background:var(--primary-container); border-top:1px solid var(--outline-variant); padding:10px 24px; display:flex; align-items:center; gap:10px; font-size:12px; color:var(--on-primary-container); flex-shrink:0; }
+    .proto-banner .material-symbols-outlined { font-size:16px; color:var(--primary); }
+
+    @media(max-width:1100px){.stat-row{grid-template-columns:repeat(2,1fr);}.section-grid{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
 
-  <!-- APP BAR -->
   <div class="app-bar">
     <span class="app-bar-logo">ILIA</span>
     <div class="app-bar-divider"></div>
     <span class="app-bar-title">Master Settlor Portal</span>
     <div class="app-bar-actions">
-      <div class="icon-btn" title="Search">
-        <span class="material-symbols-outlined">search</span>
-      </div>
-      <div class="icon-btn" title="Notifications">
-        <span class="material-symbols-outlined">notifications</span>
-        <div class="notif-dot"></div>
-      </div>
-      <div class="icon-btn" title="Help">
-        <span class="material-symbols-outlined">help_outline</span>
-      </div>
-      <div class="avatar" title="Jamin Austin">JA</div>
+      <div class="icon-btn"><span class="material-symbols-outlined">search</span></div>
+      <div class="icon-btn"><span class="material-symbols-outlined">notifications</span><div class="notif-dot"></div></div>
+      <div class="icon-btn"><span class="material-symbols-outlined">help_outline</span></div>
+      <div class="avatar">JA</div>
     </div>
   </div>
 
-  <!-- LAYOUT -->
   <div class="layout">
-
-    <!-- NAV RAIL -->
     <nav class="nav-rail">
-      <a class="nav-item active" href="#">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="nav-label">Dashboard</span>
-      </a>
-      <a class="nav-item" href="#">
-        <span class="material-symbols-outlined">group</span>
-        <span class="nav-label">Settlors</span>
-      </a>
-      <a class="nav-item" href="#">
-        <span class="material-symbols-outlined">account_balance</span>
-        <span class="nav-label">Trusts</span>
-      </a>
-      <a class="nav-item" href="#">
-        <span class="material-symbols-outlined">payments</span>
-        <span class="nav-label">Payments</span>
-      </a>
-      <a class="nav-item" href="#">
-        <span class="material-symbols-outlined">description</span>
-        <span class="nav-label">Documents</span>
-      </a>
-      <a class="nav-item" href="#">
-        <span class="material-symbols-outlined">bar_chart</span>
-        <span class="nav-label">Reports</span>
-      </a>
+      <a class="nav-item active" href="#"><span class="material-symbols-outlined">dashboard</span><span class="nav-label">Dashboard</span></a>
+      <a class="nav-item" href="#"><span class="material-symbols-outlined">group</span><span class="nav-label">Settlors</span></a>
+      <a class="nav-item" href="#"><span class="material-symbols-outlined">account_balance</span><span class="nav-label">Trusts</span></a>
+      <a class="nav-item" href="#"><span class="material-symbols-outlined">payments</span><span class="nav-label">Payments</span></a>
+      <a class="nav-item" href="#"><span class="material-symbols-outlined">description</span><span class="nav-label">Documents</span></a>
+      <a class="nav-item" href="#"><span class="material-symbols-outlined">bar_chart</span><span class="nav-label">Reports</span></a>
       <div class="nav-spacer"></div>
-      <a class="nav-item" href="#">
-        <span class="material-symbols-outlined">settings</span>
-        <span class="nav-label">Settings</span>
-      </a>
+      <a class="nav-item" href="#"><span class="material-symbols-outlined">settings</span><span class="nav-label">Settings</span></a>
     </nav>
 
-    <!-- MAIN CONTENT -->
     <main class="content">
       <div class="page-header">
         <div class="page-title">Good morning, Jamin 👋</div>
         <div class="page-sub">Master Settlor Portal · Wednesday, May 27, 2026</div>
       </div>
 
-      <!-- STAT CARDS -->
       <div class="stat-row">
+
         <div class="stat-card">
+          <div class="fire-container">
+            <div class="flame flame-outer-l"></div>
+            <div class="flame flame-mid-l"></div>
+            <div class="flame flame-core"></div>
+            <div class="flame flame-mid-r"></div>
+            <div class="flame flame-outer-r"></div>
+            <div class="ember"></div>
+            <div class="ember"></div>
+            <div class="ember"></div>
+            <div class="ember"></div>
+            <div class="ember"></div>
+          </div>
           <div class="stat-card-header">
             <div class="stat-label">Active Settlors</div>
-            <div class="stat-icon" style="background:var(--primary-container)">
-              <span class="material-symbols-outlined" style="color:var(--primary)">group</span>
-            </div>
+            <div class="stat-icon" style="background:var(--primary-container)"><span class="material-symbols-outlined" style="color:var(--primary)">group</span></div>
           </div>
           <div class="stat-value" style="color:var(--primary)">247</div>
-          <div class="stat-delta delta-up">
-            <span class="material-symbols-outlined" style="font-size:14px">trending_up</span>
-            +12 this quarter
-          </div>
+          <div class="stat-delta delta-up"><span class="material-symbols-outlined" style="font-size:14px">trending_up</span>+12 this quarter</div>
         </div>
 
         <div class="stat-card">
+          <div class="fire-container">
+            <div class="flame flame-outer-l"></div>
+            <div class="flame flame-mid-l"></div>
+            <div class="flame flame-core"></div>
+            <div class="flame flame-mid-r"></div>
+            <div class="flame flame-outer-r"></div>
+            <div class="ember"></div><div class="ember"></div><div class="ember"></div><div class="ember"></div><div class="ember"></div>
+          </div>
           <div class="stat-card-header">
             <div class="stat-label">Active Trusts</div>
-            <div class="stat-icon" style="background:var(--primary-container)">
-              <span class="material-symbols-outlined" style="color:var(--primary)">account_balance</span>
-            </div>
+            <div class="stat-icon" style="background:var(--primary-container)"><span class="material-symbols-outlined" style="color:var(--primary)">account_balance</span></div>
           </div>
           <div class="stat-value" style="color:var(--primary)">312</div>
-          <div class="stat-delta delta-up">
-            <span class="material-symbols-outlined" style="font-size:14px">trending_up</span>
-            +8 this month
-          </div>
+          <div class="stat-delta delta-up"><span class="material-symbols-outlined" style="font-size:14px">trending_up</span>+8 this month</div>
         </div>
 
         <div class="stat-card">
+          <div class="fire-container">
+            <div class="flame flame-outer-l"></div>
+            <div class="flame flame-mid-l"></div>
+            <div class="flame flame-core"></div>
+            <div class="flame flame-mid-r"></div>
+            <div class="flame flame-outer-r"></div>
+            <div class="ember"></div><div class="ember"></div><div class="ember"></div><div class="ember"></div><div class="ember"></div>
+          </div>
           <div class="stat-card-header">
             <div class="stat-label">Total Face Value</div>
-            <div class="stat-icon" style="background:var(--success-container)">
-              <span class="material-symbols-outlined" style="color:var(--success)">attach_money</span>
-            </div>
+            <div class="stat-icon" style="background:var(--success-container)"><span class="material-symbols-outlined" style="color:var(--success)">attach_money</span></div>
           </div>
           <div class="stat-value" style="color:var(--success)">$284M</div>
-          <div class="stat-delta delta-up">
-            <span class="material-symbols-outlined" style="font-size:14px">trending_up</span>
-            +$14M YTD
-          </div>
+          <div class="stat-delta delta-up"><span class="material-symbols-outlined" style="font-size:14px">trending_up</span>+$14M YTD</div>
         </div>
 
         <div class="stat-card">
+          <div class="fire-container">
+            <div class="flame flame-outer-l"></div>
+            <div class="flame flame-mid-l"></div>
+            <div class="flame flame-core"></div>
+            <div class="flame flame-mid-r"></div>
+            <div class="flame flame-outer-r"></div>
+            <div class="ember"></div><div class="ember"></div><div class="ember"></div><div class="ember"></div><div class="ember"></div>
+          </div>
           <div class="stat-card-header">
             <div class="stat-label">Pending Actions</div>
-            <div class="stat-icon" style="background:var(--warning-container)">
-              <span class="material-symbols-outlined" style="color:var(--warning)">warning</span>
-            </div>
+            <div class="stat-icon" style="background:var(--warning-container)"><span class="material-symbols-outlined" style="color:var(--warning)">warning</span></div>
           </div>
           <div class="stat-value" style="color:var(--warning)">18</div>
-          <div class="stat-delta delta-warn">
-            <span class="material-symbols-outlined" style="font-size:14px">priority_high</span>
-            5 urgent — review now
-          </div>
+          <div class="stat-delta delta-warn"><span class="material-symbols-outlined" style="font-size:14px">priority_high</span>5 urgent — review now</div>
         </div>
+
       </div>
 
-      <!-- SECTION GRID -->
       <div class="section-grid">
-
-        <!-- SETTLOR TABLE -->
         <div class="card">
           <div class="card-header">
-            <div>
-              <div class="card-title">Active Settlors</div>
-              <div class="card-sub">Sorted by last activity · showing 5 of 247</div>
-            </div>
+            <div><div class="card-title">Active Settlors</div><div class="card-sub">Sorted by last activity · showing 5 of 247</div></div>
             <span class="card-action">View all →</span>
           </div>
           <table class="data-table">
-            <thead>
-              <tr>
-                <th>Settlor</th>
-                <th>Trust ID</th>
-                <th>Policy</th>
-                <th>Face Value</th>
-                <th>Loan Year</th>
-                <th>Status</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Settlor</th><th>Trust ID</th><th>Policy</th><th>Face Value</th><th>Loan Year</th><th>Status</th></tr></thead>
             <tbody>
-              <tr>
-                <td>
-                  <div class="client-name">Smith, John</div>
-                  <div class="client-id">DOB 04/15/1975 · TX</div>
-                </td>
-                <td>TR-20220415</td>
-                <td>LS22972246</td>
-                <td>$1,269,884</td>
-                <td>Year 3</td>
-                <td><span class="badge success">In force</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="client-name">Williams, Sarah</div>
-                  <div class="client-id">DOB 08/22/1968 · FL</div>
-                </td>
-                <td>TR-20211208</td>
-                <td>LS22887123</td>
-                <td>$1,100,000</td>
-                <td>Year 4</td>
-                <td><span class="badge success">In force</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="client-name">Johnson, Maria</div>
-                  <div class="client-id">DOB 11/03/1971 · CA</div>
-                </td>
-                <td>TR-20230614</td>
-                <td>LS22941187</td>
-                <td>$850,000</td>
-                <td>Year 2</td>
-                <td><span class="badge warning">Action needed</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="client-name">Davis, Robert</div>
-                  <div class="client-id">DOB 02/28/1965 · NY</div>
-                </td>
-                <td>TR-20220901</td>
-                <td>LS22908834</td>
-                <td>$975,000</td>
-                <td>Year 3</td>
-                <td><span class="badge primary">In review</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="client-name">Thompson, Alan</div>
-                  <div class="client-id">DOB 07/14/1960 · TX</div>
-                </td>
-                <td>TR-20230301</td>
-                <td>LS22834456</td>
-                <td>$1,450,000</td>
-                <td>Year 2</td>
-                <td><span class="badge success">In force</span></td>
-              </tr>
+              <tr><td><div class="client-name">Smith, John</div><div class="client-id">DOB 04/15/1975 · TX</div></td><td>TR-20220415</td><td>LS22972246</td><td>$1,269,884</td><td>Year 3</td><td><span class="badge success">In force</span></td></tr>
+              <tr><td><div class="client-name">Williams, Sarah</div><div class="client-id">DOB 08/22/1968 · FL</div></td><td>TR-20211208</td><td>LS22887123</td><td>$1,100,000</td><td>Year 4</td><td><span class="badge success">In force</span></td></tr>
+              <tr><td><div class="client-name">Johnson, Maria</div><div class="client-id">DOB 11/03/1971 · CA</div></td><td>TR-20230614</td><td>LS22941187</td><td>$850,000</td><td>Year 2</td><td><span class="badge warning">Action needed</span></td></tr>
+              <tr><td><div class="client-name">Davis, Robert</div><div class="client-id">DOB 02/28/1965 · NY</div></td><td>TR-20220901</td><td>LS22908834</td><td>$975,000</td><td>Year 3</td><td><span class="badge primary">In review</span></td></tr>
+              <tr><td><div class="client-name">Thompson, Alan</div><div class="client-id">DOB 07/14/1960 · TX</div></td><td>TR-20230301</td><td>LS22834456</td><td>$1,450,000</td><td>Year 2</td><td><span class="badge success">In force</span></td></tr>
             </tbody>
           </table>
         </div>
 
-        <!-- RIGHT COLUMN -->
         <div style="display:flex;flex-direction:column;gap:16px;">
-
-          <!-- QUICK ACTIONS -->
           <div class="card">
-            <div class="card-header">
-              <div class="card-title">Quick Actions</div>
-            </div>
+            <div class="card-header"><div class="card-title">Quick Actions</div></div>
             <div class="quick-actions">
-              <div class="quick-action-btn">
-                <span class="material-symbols-outlined">person_add</span>
-                <span class="qa-label">New Settlor</span>
-              </div>
-              <div class="quick-action-btn">
-                <span class="material-symbols-outlined">account_balance</span>
-                <span class="qa-label">New Trust</span>
-              </div>
-              <div class="quick-action-btn">
-                <span class="material-symbols-outlined">payments</span>
-                <span class="qa-label">Record Payment</span>
-              </div>
-              <div class="quick-action-btn">
-                <span class="material-symbols-outlined">upload_file</span>
-                <span class="qa-label">Upload Docs</span>
-              </div>
-              <div class="quick-action-btn">
-                <span class="material-symbols-outlined">draw</span>
-                <span class="qa-label">Send for Signature</span>
-              </div>
-              <div class="quick-action-btn">
-                <span class="material-symbols-outlined">bar_chart</span>
-                <span class="qa-label">Run Report</span>
-              </div>
+              <div class="quick-action-btn"><span class="material-symbols-outlined">person_add</span><span class="qa-label">New Settlor</span></div>
+              <div class="quick-action-btn"><span class="material-symbols-outlined">account_balance</span><span class="qa-label">New Trust</span></div>
+              <div class="quick-action-btn"><span class="material-symbols-outlined">payments</span><span class="qa-label">Record Payment</span></div>
+              <div class="quick-action-btn"><span class="material-symbols-outlined">upload_file</span><span class="qa-label">Upload Docs</span></div>
+              <div class="quick-action-btn"><span class="material-symbols-outlined">draw</span><span class="qa-label">Send for Signature</span></div>
+              <div class="quick-action-btn"><span class="material-symbols-outlined">bar_chart</span><span class="qa-label">Run Report</span></div>
             </div>
           </div>
-
-          <!-- ACTIVITY FEED -->
           <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Recent Activity</div>
-                <div class="card-sub">Last 24 hours</div>
-              </div>
-              <span class="card-action">View all</span>
-            </div>
+            <div class="card-header"><div><div class="card-title">Recent Activity</div><div class="card-sub">Last 24 hours</div></div><span class="card-action">View all</span></div>
             <div class="activity-list">
-              <div class="activity-item">
-                <div class="activity-dot" style="background:var(--warning-container)">
-                  <span class="material-symbols-outlined" style="color:var(--warning)">warning</span>
-                </div>
-                <div class="activity-text">
-                  <div class="activity-title">Signature pending — Johnson, Maria</div>
-                  <div class="activity-meta">Trust docs · LS22941187</div>
-                </div>
-                <div class="activity-time">2h ago</div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot" style="background:var(--success-container)">
-                  <span class="material-symbols-outlined" style="color:var(--success)">check_circle</span>
-                </div>
-                <div class="activity-text">
-                  <div class="activity-title">Tranche funded — Smith, John</div>
-                  <div class="activity-meta">$43,550 · Year 3 · TR-20220415</div>
-                </div>
-                <div class="activity-time">4h ago</div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot" style="background:var(--primary-container)">
-                  <span class="material-symbols-outlined" style="color:var(--primary)">description</span>
-                </div>
-                <div class="activity-text">
-                  <div class="activity-title">Trust docs uploaded — Thompson, Alan</div>
-                  <div class="activity-meta">3 documents · TR-20230301</div>
-                </div>
-                <div class="activity-time">Yesterday</div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot" style="background:var(--success-container)">
-                  <span class="material-symbols-outlined" style="color:var(--success)">person_add</span>
-                </div>
-                <div class="activity-text">
-                  <div class="activity-title">New settlor enrolled — Davis, Robert</div>
-                  <div class="activity-meta">Kai-Zen IUL · Nationwide</div>
-                </div>
-                <div class="activity-time">Yesterday</div>
-              </div>
+              <div class="activity-item"><div class="activity-dot" style="background:var(--warning-container)"><span class="material-symbols-outlined" style="color:var(--warning)">warning</span></div><div class="activity-text"><div class="activity-title">Signature pending — Johnson, Maria</div><div class="activity-meta">Trust docs · LS22941187</div></div><div class="activity-time">2h ago</div></div>
+              <div class="activity-item"><div class="activity-dot" style="background:var(--success-container)"><span class="material-symbols-outlined" style="color:var(--success)">check_circle</span></div><div class="activity-text"><div class="activity-title">Tranche funded — Smith, John</div><div class="activity-meta">$43,550 · Year 3 · TR-20220415</div></div><div class="activity-time">4h ago</div></div>
+              <div class="activity-item"><div class="activity-dot" style="background:var(--primary-container)"><span class="material-symbols-outlined" style="color:var(--primary)">description</span></div><div class="activity-text"><div class="activity-title">Trust docs uploaded — Thompson, Alan</div><div class="activity-meta">3 documents · TR-20230301</div></div><div class="activity-time">Yesterday</div></div>
+              <div class="activity-item"><div class="activity-dot" style="background:var(--success-container)"><span class="material-symbols-outlined" style="color:var(--success)">person_add</span></div><div class="activity-text"><div class="activity-title">New settlor enrolled — Davis, Robert</div><div class="activity-meta">Kai-Zen IUL · Nationwide</div></div><div class="activity-time">Yesterday</div></div>
             </div>
           </div>
-
         </div>
       </div>
-
     </main>
   </div>
 
-  <!-- PROTOTYPE BANNER -->
   <div class="proto-banner">
     <span class="material-symbols-outlined">construction</span>
     <span><strong>Prototype</strong> — Master Settlor Portal · ILIA Design Kit v1.0 · NIW / Simplicity Group · Not for production use</span>
