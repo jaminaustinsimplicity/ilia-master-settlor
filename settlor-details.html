@@ -292,18 +292,30 @@
           </div>
           <div class="card-sub">The individual authorized to sign DBR election forms and DocuSign envelopes on behalf of this trust</div>
         </div>
-        <!-- Preview toggle -->
-        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-          <span style="font-size:12px;color:var(--on-surface-variant);">Preview: Settlor separate from insured</span>
-          <label class="toggle-switch" title="Toggle to preview what this section looks like when the settlor is not the insured">
-            <input type="checkbox" id="signer-toggle" onchange="toggleSignerView(this.checked)"/>
-            <span class="toggle-track"><span class="toggle-thumb"></span></span>
-          </label>
+        <!-- Two toggles side by side -->
+        <div style="display:flex;align-items:center;gap:20px;flex-shrink:0;">
+          <!-- Individual vs Entity toggle (only visible in separate-signer preview) -->
+          <div id="entity-toggle-wrap" style="display:none;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:var(--on-surface-variant);" id="entity-label">Individual</span>
+            <label class="toggle-switch" title="Toggle Individual vs Entity signer">
+              <input type="checkbox" id="entity-toggle" onchange="toggleEntityView(this.checked)"/>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+            <span style="font-size:12px;color:var(--on-surface-variant);">Entity</span>
+          </div>
+          <!-- Preview: separate from insured -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:var(--on-surface-variant);">Preview: Settlor separate from insured</span>
+            <label class="toggle-switch" title="Toggle to preview settlor separate from insured">
+              <input type="checkbox" id="signer-toggle" onchange="toggleSignerView(this.checked)"/>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
         </div>
       </div>
       <div class="card-body">
 
-        <!-- STATE A: Same as insured (name + email only) -->
+        <!-- STATE A: Same as insured — name + email only -->
         <div id="signer-same-state">
           <div class="signer-same-banner">
             <span class="material-symbols-outlined">verified_user</span>
@@ -326,19 +338,20 @@
           </div>
         </div>
 
-        <!-- STATE B: Separate signer -->
+        <!-- STATE B: Separate signer — Individual -->
         <div id="signer-separate-state" style="display:none;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:8px 12px;background:var(--primary-container);border-radius:8px;">
             <span class="material-symbols-outlined" style="font-size:15px;color:var(--primary);">visibility</span>
             <span style="font-size:12px;color:var(--on-primary-container);">Preview mode — shows how this section appears when the settlor is separate from the insured (T4+ tranche)</span>
           </div>
 
-          <div class="signer-list" id="signer-list">
+          <!-- Individual signer form -->
+          <div id="individual-signer">
             <div class="signer-card">
               <div class="signer-card-header">
                 <div class="signer-card-label">
                   <span class="type-chip individual" style="font-size:11px;padding:2px 10px;"><span class="material-symbols-outlined" style="font-size:13px;">person</span>Individual</span>
-                  Authorized Signer #1
+                  Authorized Signer
                 </div>
                 <div class="signer-card-actions">
                   <button class="btn-text" onclick="toast('Signer removed')"><span class="material-symbols-outlined" style="font-size:15px;">delete_outline</span></button>
@@ -361,21 +374,42 @@
                   <label class="field-label">Phone Number</label>
                   <input class="field-input" type="tel" value=""/>
                 </div>
-                <div class="form-field">
-                  <label class="field-label">Signer Role</label>
-                  <select class="field-input">
-                    <option selected>Settlor Authorized Signer</option>
-                    <option>Trust Officer</option>
-                    <option>Power of Attorney</option>
-                    <option>Other</option>
-                  </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Entity signer form -->
+          <div id="entity-signer" style="display:none;">
+            <div class="signer-card">
+              <div class="signer-card-header">
+                <div class="signer-card-label">
+                  <span class="type-chip entity" style="font-size:11px;padding:2px 10px;"><span class="material-symbols-outlined" style="font-size:13px;">business</span>Entity</span>
+                  Authorized Signer
+                </div>
+                <div class="signer-card-actions">
+                  <button class="btn-text" onclick="toast('Signer removed')"><span class="material-symbols-outlined" style="font-size:15px;">delete_outline</span></button>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-field full">
+                  <label class="field-label">Entity / Organization Name</label>
+                  <input class="field-input" type="text" value="Rausch Bros Monument Co Inc"/>
                 </div>
                 <div class="form-field">
-                  <label class="field-label">DocuSign Routing Order</label>
-                  <select class="field-input">
-                    <option selected>After Client signs (Ceremony #2)</option>
-                    <option>Parallel with Client</option>
-                  </select>
+                  <label class="field-label">Authorized Representative Name</label>
+                  <input class="field-input" type="text" value="David Rausch"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Title / Role at Entity</label>
+                  <input class="field-input" type="text" value="President"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Email Address</label>
+                  <input class="field-input" type="email" value="david.rausch@rauschbros.com"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Phone Number</label>
+                  <input class="field-input" type="tel" value=""/>
                 </div>
               </div>
             </div>
@@ -429,13 +463,22 @@ function showSeparate(){
 function showSame(){
   document.getElementById('card-separate').style.display='none';
   document.getElementById('card-same').style.display='';
-  // reset toggle when master settlor card switches back to same
   var tog=document.getElementById('signer-toggle');
   if(tog){tog.checked=false;toggleSignerView(false);}
 }
 function toggleSignerView(isSeparate){
   document.getElementById('signer-same-state').style.display=isSeparate?'none':'';
   document.getElementById('signer-separate-state').style.display=isSeparate?'':'none';
+  var wrap=document.getElementById('entity-toggle-wrap');
+  if(wrap) wrap.style.display=isSeparate?'flex':'none';
+  if(!isSeparate){
+    var et=document.getElementById('entity-toggle');
+    if(et){et.checked=false;toggleEntityView(false);}
+  }
+}
+function toggleEntityView(isEntity){
+  document.getElementById('individual-signer').style.display=isEntity?'none':'';
+  document.getElementById('entity-signer').style.display=isEntity?'':'none';
 }
 function toast(msg){
   const t=document.getElementById('toast');
