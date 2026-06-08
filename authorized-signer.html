@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>ILIA — Authorized Signer Section</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary:#2A62E4;--on-primary:#FFFFFF;--primary-container:#DBE1FF;
+      --on-primary-container:#001257;--secondary:#565E71;--surface:#FDFBFF;
+      --surface-container-low:#F3F3FA;--surface-container:#EDEDF4;
+      --surface-container-high:#E7E8EE;--on-surface:#1A1B1F;
+      --on-surface-variant:#44464F;--outline:#74777F;--outline-variant:#C4C6D0;
+      --success:#18A862;--success-container:#C6F5D6;
+      --warning:#E6A82E;--warning-container:#FCE9C2;
+      --error:#BA1A1A;--error-container:#FFDAD6;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Roboto',system-ui,sans-serif;background:var(--surface-container-low);color:var(--on-surface);display:flex;flex-direction:column;min-height:100vh;}
+    .material-symbols-outlined{font-family:'Material Symbols Outlined';line-height:1;}
+    .app-bar{background:var(--primary);color:#fff;display:flex;align-items:center;gap:16px;padding:0 24px;height:64px;flex-shrink:0;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+    .app-bar-logo{font-size:20px;font-weight:700;letter-spacing:0.5px;}
+    .app-bar-divider{width:1px;height:24px;background:rgba(255,255,255,0.3);}
+    .app-bar-title{font-size:18px;font-weight:500;flex:1;}
+    .app-bar-actions{display:flex;align-items:center;gap:8px;}
+    .icon-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.15s;position:relative;}
+    .icon-btn:hover{background:rgba(255,255,255,0.15);}
+    .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--warning);border:2px solid var(--primary);}
+    .avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;}
+    .layout{display:flex;flex:1;overflow:hidden;}
+    .nav-rail{width:88px;background:var(--surface-container);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;border-right:1px solid var(--outline-variant);flex-shrink:0;position:sticky;top:64px;height:calc(100vh - 64px);}
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px;border-radius:16px;cursor:pointer;width:76px;transition:background 0.15s;text-decoration:none;position:relative;}
+    .nav-item:hover{background:var(--surface-container-high);}
+    .nav-item.active{background:var(--primary-container);}
+    .nav-item .material-symbols-outlined{font-size:22px;color:var(--on-surface-variant);}
+    .nav-item.active .material-symbols-outlined{color:var(--primary);}
+    .nav-label{font-size:10px;color:var(--on-surface-variant);text-align:center;line-height:1.3;}
+    .nav-item.active .nav-label{color:var(--primary);font-weight:500;}
+    .nav-spacer{flex:1;}
+    .nav-badge{position:absolute;top:6px;right:8px;background:var(--warning);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--surface-container);line-height:1;}
+    .content{flex:1;padding:28px 32px;overflow-y:auto;max-width:900px;}
+    .breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--on-surface-variant);margin-bottom:16px;}
+    .breadcrumb a{color:var(--primary);text-decoration:none;}
+    .breadcrumb a:hover{text-decoration:underline;}
+    .breadcrumb .sep{font-size:16px;color:var(--outline);}
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .page-title{font-size:22px;font-weight:500;}
+    .page-sub{font-size:14px;color:var(--on-surface-variant);margin-top:3px;}
+    .btn-primary{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;background:var(--primary);color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:500;font-family:'Roboto',sans-serif;cursor:pointer;transition:opacity 0.15s;}
+    .btn-primary:hover{opacity:0.88;}
+    .btn-outlined{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:20px;font-size:13px;font-weight:500;font-family:'Roboto',sans-serif;cursor:pointer;}
+    .btn-text{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:transparent;color:var(--primary);border:none;border-radius:8px;font-size:13px;font-weight:500;font-family:'Roboto',sans-serif;cursor:pointer;transition:background 0.15s;}
+    .btn-text:hover{background:var(--primary-container);}
+    .btn-text-danger{color:var(--error);}
+    .btn-text-danger:hover{background:var(--error-container);}
+
+    /* Card */
+    .card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:16px;overflow:hidden;margin-bottom:20px;}
+    .card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px 14px;border-bottom:1px solid var(--outline-variant);}
+    .card-title{font-size:15px;font-weight:500;display:flex;align-items:center;gap:8px;}
+    .card-sub{font-size:12px;color:var(--on-surface-variant);margin-top:2px;}
+    .card-body{padding:20px 24px;}
+
+    /* Relation badge */
+    .relation-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+    .relation-text{font-size:14px;color:var(--on-surface-variant);}
+    .relation-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;}
+    .relation-badge.same{background:var(--success-container);color:#003819;}
+    .relation-badge.separate{background:var(--primary-container);color:var(--on-primary-container);}
+
+    /* Form fields — Material filled style */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;}
+    .form-grid.three{grid-template-columns:1fr 1fr 1fr;}
+    .form-field{position:relative;}
+    .form-field.full{grid-column:1/-1;}
+    .field-label{font-size:12px;color:var(--on-surface-variant);font-weight:500;margin-bottom:6px;display:block;}
+    .field-input{width:100%;background:var(--surface-container-high);border:none;border-bottom:2px solid var(--outline);border-radius:4px 4px 0 0;padding:12px 14px 10px;font-size:14px;color:var(--on-surface);font-family:'Roboto',sans-serif;transition:border-color 0.15s;outline:none;}
+    .field-input:focus{border-bottom-color:var(--primary);background:var(--surface-container);}
+    .field-input:disabled{background:var(--surface-container);color:var(--on-surface-variant);cursor:default;}
+    .field-input.readonly{border-bottom-style:dashed;color:var(--on-surface-variant);}
+    select.field-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%2344464F' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+
+    /* Section divider */
+    .section-divider{border:none;border-top:1px solid var(--outline-variant);margin:8px 0 20px;}
+
+    /* Authorized signer cards */
+    .signer-list{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
+    .signer-card{background:var(--surface-container-low);border:1px solid var(--outline-variant);border-radius:12px;padding:16px 18px;}
+    .signer-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .signer-card-label{font-size:12px;font-weight:500;color:var(--on-surface-variant);display:flex;align-items:center;gap:6px;}
+    .signer-card-actions{display:flex;gap:4px;}
+    .signer-same-banner{display:flex;align-items:center;gap:10px;background:var(--success-container);border:1px solid #A5D6A7;border-radius:10px;padding:12px 16px;}
+    .signer-same-banner .material-symbols-outlined{color:var(--success);font-size:20px;}
+    .signer-same-text{font-size:13px;font-weight:500;color:#003819;}
+    .signer-same-sub{font-size:12px;color:#1B5E20;margin-top:1px;}
+    .signer-type-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+    .type-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;}
+    .type-chip.individual{background:var(--primary-container);color:var(--on-primary-container);}
+    .type-chip.entity{background:#EDE7F6;color:#311B92;}
+    .add-signer-btn{display:flex;align-items:center;gap:8px;padding:12px 16px;border:1.5px dashed var(--outline);border-radius:12px;cursor:pointer;color:var(--primary);font-size:13px;font-weight:500;transition:background 0.15s;background:transparent;font-family:'Roboto',sans-serif;width:100%;}
+    .add-signer-btn:hover{background:var(--primary-container);}
+
+    /* Footer */
+    .save-bar{background:var(--surface);border-top:1px solid var(--outline-variant);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:12px;}
+    .save-bar-note{font-size:12px;color:var(--on-surface-variant);display:flex;align-items:center;gap:6px;}
+    .save-bar-actions{display:flex;gap:10px;}
+    .proto-banner{background:var(--primary-container);border-top:1px solid var(--outline-variant);padding:10px 24px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--on-primary-container);flex-shrink:0;}
+
+    /* Toast */
+    .toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%) translateY(40px);background:#323232;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:200;white-space:nowrap;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    /* Toggle switch */
+    .toggle-switch{display:inline-flex;align-items:center;cursor:pointer;}
+    .toggle-switch input{display:none;}
+    .toggle-track{width:40px;height:22px;background:var(--outline);border-radius:11px;position:relative;transition:background 0.2s;}
+    .toggle-switch input:checked + .toggle-track{background:var(--primary);}
+    .toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.3);}
+    .toggle-switch input:checked + .toggle-track .toggle-thumb{transform:translateX(18px);}
+
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Roboto',system-ui,sans-serif;background:#fff;color:var(--on-surface);padding:24px;}
+    .material-symbols-outlined{font-family:'Material Symbols Outlined';line-height:1;}
+    .card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:16px;overflow:hidden;}
+    .card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px 14px;border-bottom:1px solid var(--outline-variant);}
+    .card-title{font-size:15px;font-weight:500;display:flex;align-items:center;gap:8px;}
+    .card-sub{font-size:12px;color:var(--on-surface-variant);margin-top:2px;}
+    .card-body{padding:20px 24px;}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;}
+    .form-field{position:relative;}
+    .form-field.full{grid-column:1/-1;}
+    .field-label{font-size:12px;color:var(--on-surface-variant);font-weight:500;margin-bottom:6px;display:block;}
+    .field-input{width:100%;background:var(--surface-container-high);border:none;border-bottom:2px solid var(--outline);border-radius:4px 4px 0 0;padding:12px 14px 10px;font-size:14px;color:var(--on-surface);font-family:'Roboto',sans-serif;transition:border-color 0.15s;outline:none;}
+    .field-input:focus{border-bottom-color:var(--primary);background:var(--surface-container);}
+    .field-input:disabled{background:var(--surface-container);color:var(--on-surface-variant);cursor:default;}
+    .field-input.readonly{border-bottom-style:dashed;color:var(--on-surface-variant);}
+    select.field-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%2344464F' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+    .signer-same-banner{display:flex;align-items:center;gap:10px;background:var(--success-container);border:1px solid #A5D6A7;border-radius:10px;padding:12px 16px;}
+    .signer-same-banner .material-symbols-outlined{color:var(--success);font-size:20px;}
+    .signer-same-text{font-size:13px;font-weight:500;color:#003819;}
+    .signer-same-sub{font-size:12px;color:#1B5E20;margin-top:1px;}
+    .signer-card{background:var(--surface-container-low);border:1px solid var(--outline-variant);border-radius:12px;padding:16px 18px;}
+    .signer-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .signer-card-label{font-size:12px;font-weight:500;color:var(--on-surface-variant);display:flex;align-items:center;gap:6px;}
+    .signer-card-actions{display:flex;gap:4px;}
+    .type-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;}
+    .type-chip.individual{background:var(--primary-container);color:var(--on-primary-container);}
+    .type-chip.entity{background:#EDE7F6;color:#311B92;}
+    .add-signer-btn{display:flex;align-items:center;gap:8px;padding:12px 16px;border:1.5px dashed var(--outline);border-radius:12px;cursor:pointer;color:var(--primary);font-size:13px;font-weight:500;transition:background 0.15s;background:transparent;font-family:'Roboto',sans-serif;width:100%;}
+    .add-signer-btn:hover{background:var(--primary-container);}
+    .btn-text{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:transparent;color:var(--primary);border:none;border-radius:8px;font-size:13px;font-weight:500;font-family:'Roboto',sans-serif;cursor:pointer;transition:background 0.15s;}
+    .btn-text:hover{background:var(--primary-container);}
+    .toggle-switch{display:inline-flex;align-items:center;cursor:pointer;}
+    .toggle-switch input{display:none;}
+    .toggle-track{width:40px;height:22px;background:var(--outline);border-radius:11px;position:relative;transition:background 0.2s;}
+    .toggle-switch input:checked + .toggle-track{background:var(--primary);}
+    .toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.3);}
+    .toggle-switch input:checked + .toggle-track .toggle-thumb{transform:translateX(18px);}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(40px);background:#323232;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:200;white-space:nowrap;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  </style>
+</head>
+<body>
+<!-- ─── AUTHORIZED SIGNER ─────────────────────────────── -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">
+            <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary);">draw</span>
+            Authorized Signer
+          </div>
+          <div class="card-sub">The individual authorized to sign DBR election forms and DocuSign envelopes on behalf of this trust</div>
+        </div>
+        <!-- Two toggles side by side -->
+        <div style="display:flex;align-items:center;gap:20px;flex-shrink:0;">
+          <!-- Individual vs Entity toggle (only visible in separate-signer preview) -->
+          <div id="entity-toggle-wrap" style="display:none;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:var(--on-surface-variant);" id="entity-label">Individual</span>
+            <label class="toggle-switch" title="Toggle Individual vs Entity signer">
+              <input type="checkbox" id="entity-toggle" onchange="toggleEntityView(this.checked)"/>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+            <span style="font-size:12px;color:var(--on-surface-variant);">Entity</span>
+          </div>
+          <!-- Preview: separate from insured -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:var(--on-surface-variant);">Preview: Settlor separate from insured</span>
+            <label class="toggle-switch" title="Toggle to preview settlor separate from insured">
+              <input type="checkbox" id="signer-toggle" onchange="toggleSignerView(this.checked)"/>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <!-- STATE A: Same as insured — name + email only -->
+        <div id="signer-same-state">
+          <div class="signer-same-banner">
+            <span class="material-symbols-outlined">verified_user</span>
+            <div>
+              <div class="signer-same-text">Authorized Signer — Same as the insured</div>
+              <div class="signer-same-sub">Frank Ocean is both the insured and the authorized signer on this trust. No separate signer is required.</div>
+            </div>
+          </div>
+          <div style="margin-top:16px;">
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="field-label">Signer Name</label>
+                <input class="field-input readonly" type="text" value="Frank Ocean" disabled/>
+              </div>
+              <div class="form-field">
+                <label class="field-label">Signer Email</label>
+                <input class="field-input readonly" type="text" value="brad.webster+11@simplicitygroup.com" disabled/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE B: Separate signer — Individual -->
+        <div id="signer-separate-state" style="display:none;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:8px 12px;background:var(--primary-container);border-radius:8px;">
+            <span class="material-symbols-outlined" style="font-size:15px;color:var(--primary);">visibility</span>
+            <span style="font-size:12px;color:var(--on-primary-container);">Preview mode — shows how this section appears when the settlor is separate from the insured (T4+ tranche)</span>
+          </div>
+
+          <!-- Individual signer form -->
+          <div id="individual-signer">
+            <div class="signer-card">
+              <div class="signer-card-header">
+                <div class="signer-card-label">
+                  <span class="type-chip individual" style="font-size:11px;padding:2px 10px;"><span class="material-symbols-outlined" style="font-size:13px;">person</span>Individual</span>
+                  Authorized Signer
+                </div>
+                <div class="signer-card-actions">
+                  <button class="btn-text" onclick="toast('Signer removed')"><span class="material-symbols-outlined" style="font-size:15px;">delete_outline</span></button>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label class="field-label">First Name</label>
+                  <input class="field-input" type="text" value="Michael"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Last Name</label>
+                  <input class="field-input" type="text" value="Lieber"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Email Address</label>
+                  <input class="field-input" type="email" value="michael.lieber@example.com"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Phone Number</label>
+                  <input class="field-input" type="tel" value=""/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Entity signer form -->
+          <div id="entity-signer" style="display:none;">
+            <div class="signer-card">
+              <div class="signer-card-header">
+                <div class="signer-card-label">
+                  <span class="type-chip entity" style="font-size:11px;padding:2px 10px;"><span class="material-symbols-outlined" style="font-size:13px;">business</span>Entity</span>
+                  Authorized Signer
+                </div>
+                <div class="signer-card-actions">
+                  <button class="btn-text" onclick="toast('Signer removed')"><span class="material-symbols-outlined" style="font-size:15px;">delete_outline</span></button>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-field full">
+                  <label class="field-label">Entity / Organization Name</label>
+                  <input class="field-input" type="text" value="Rausch Bros Monument Co Inc"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Authorized Representative Name</label>
+                  <input class="field-input" type="text" value="David Rausch"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Title / Role at Entity</label>
+                  <input class="field-input" type="text" value="President"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Email Address</label>
+                  <input class="field-input" type="email" value="david.rausch@rauschbros.com"/>
+                </div>
+                <div class="form-field">
+                  <label class="field-label">Phone Number</label>
+                  <input class="field-input" type="tel" value=""/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="add-signer-btn" style="margin-top:12px;" onclick="toast('Add Signer — coming soon')">
+            <span class="material-symbols-outlined">add_circle_outline</span>
+            Add Another Authorized Signer
+          </button>
+
+          <div style="margin-top:14px;padding:10px 14px;background:var(--warning-container);border-radius:8px;display:flex;align-items:flex-start;gap:8px;">
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--warning);flex-shrink:0;margin-top:1px;">info</span>
+            <span style="font-size:12px;color:#3D2C00;line-height:1.5;">All authorized signers listed here will receive a DocuSign envelope when a DBR notice is sent for this policy. Ensure email addresses are accurate before DBR notices go live.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+<div class="toast" id="toast">
+  <span class="material-symbols-outlined" style="font-size:16px;color:#69F0AE;">check_circle</span>
+  <span id="toast-msg"></span>
+</div>
+
+<script>
+function showSeparate(){
+  document.getElementById('card-same').style.display='none';
+  document.getElementById('card-separate').style.display='';
+}
+function showSame(){
+  document.getElementById('card-separate').style.display='none';
+  document.getElementById('card-same').style.display='';
+  var tog=document.getElementById('signer-toggle');
+  if(tog){tog.checked=false;toggleSignerView(false);}
+}
+function toggleSignerView(isSeparate){
+  document.getElementById('signer-same-state').style.display=isSeparate?'none':'';
+  document.getElementById('signer-separate-state').style.display=isSeparate?'':'none';
+  var wrap=document.getElementById('entity-toggle-wrap');
+  if(wrap) wrap.style.display=isSeparate?'flex':'none';
+  if(!isSeparate){
+    var et=document.getElementById('entity-toggle');
+    if(et){et.checked=false;toggleEntityView(false);}
+  }
+}
+function toggleEntityView(isEntity){
+  document.getElementById('individual-signer').style.display=isEntity?'none':'';
+  document.getElementById('entity-signer').style.display=isEntity?'':'none';
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
