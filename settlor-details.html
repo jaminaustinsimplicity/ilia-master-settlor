@@ -113,6 +113,14 @@
     /* Toast */
     .toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%) translateY(40px);background:#323232;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:200;white-space:nowrap;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    /* Toggle switch */
+    .toggle-switch{display:inline-flex;align-items:center;cursor:pointer;}
+    .toggle-switch input{display:none;}
+    .toggle-track{width:40px;height:22px;background:var(--outline);border-radius:11px;position:relative;transition:background 0.2s;}
+    .toggle-switch input:checked + .toggle-track{background:var(--primary);}
+    .toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.3);}
+    .toggle-switch input:checked + .toggle-track .toggle-thumb{transform:translateX(18px);}
   </style>
 </head>
 <body>
@@ -284,10 +292,18 @@
           </div>
           <div class="card-sub">The individual authorized to sign DBR election forms and DocuSign envelopes on behalf of this trust</div>
         </div>
+        <!-- Preview toggle -->
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <span style="font-size:12px;color:var(--on-surface-variant);">Preview: Settlor separate from insured</span>
+          <label class="toggle-switch" title="Toggle to preview what this section looks like when the settlor is not the insured">
+            <input type="checkbox" id="signer-toggle" onchange="toggleSignerView(this.checked)"/>
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </label>
+        </div>
       </div>
       <div class="card-body">
 
-        <!-- STATE A: Same as insured -->
+        <!-- STATE A: Same as insured (name + email only) -->
         <div id="signer-same-state">
           <div class="signer-same-banner">
             <span class="material-symbols-outlined">verified_user</span>
@@ -306,22 +322,18 @@
                 <label class="field-label">Signer Email</label>
                 <input class="field-input readonly" type="text" value="brad.webster+11@simplicitygroup.com" disabled/>
               </div>
-              <div class="form-field">
-                <label class="field-label">Signer Role</label>
-                <input class="field-input readonly" type="text" value="Client / Insured / Settlor" disabled/>
-              </div>
-              <div class="form-field">
-                <label class="field-label">DocuSign Routing</label>
-                <input class="field-input readonly" type="text" value="Single signer — client only" disabled/>
-              </div>
             </div>
           </div>
         </div>
 
-        <!-- STATE B: Separate signer (hidden by default) -->
+        <!-- STATE B: Separate signer -->
         <div id="signer-separate-state" style="display:none;">
-          <div class="signer-list" id="signer-list">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:8px 12px;background:var(--primary-container);border-radius:8px;">
+            <span class="material-symbols-outlined" style="font-size:15px;color:var(--primary);">visibility</span>
+            <span style="font-size:12px;color:var(--on-primary-container);">Preview mode — shows how this section appears when the settlor is separate from the insured (T4+ tranche)</span>
+          </div>
 
+          <div class="signer-list" id="signer-list">
             <div class="signer-card">
               <div class="signer-card-header">
                 <div class="signer-card-label">
@@ -367,7 +379,6 @@
                 </div>
               </div>
             </div>
-
           </div>
 
           <button class="add-signer-btn" style="margin-top:12px;" onclick="toast('Add Signer — coming soon')">
@@ -414,14 +425,17 @@
 function showSeparate(){
   document.getElementById('card-same').style.display='none';
   document.getElementById('card-separate').style.display='';
-  document.getElementById('signer-same-state').style.display='none';
-  document.getElementById('signer-separate-state').style.display='';
 }
 function showSame(){
   document.getElementById('card-separate').style.display='none';
   document.getElementById('card-same').style.display='';
-  document.getElementById('signer-same-state').style.display='';
-  document.getElementById('signer-separate-state').style.display='none';
+  // reset toggle when master settlor card switches back to same
+  var tog=document.getElementById('signer-toggle');
+  if(tog){tog.checked=false;toggleSignerView(false);}
+}
+function toggleSignerView(isSeparate){
+  document.getElementById('signer-same-state').style.display=isSeparate?'none':'';
+  document.getElementById('signer-separate-state').style.display=isSeparate?'':'none';
 }
 function toast(msg){
   const t=document.getElementById('toast');
